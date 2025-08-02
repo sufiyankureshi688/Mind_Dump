@@ -1,61 +1,100 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
-  // Global
-  container: { flex: 1, padding: 20, paddingTop: 60, backgroundColor: "#fff" },
-  heading: { fontSize: 26, fontWeight: "bold", marginBottom: 10 },
-  sectionHeading: { fontSize: 20, fontWeight: "600", marginTop: 25, marginBottom: 10 },
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
 
-  // Inputs
-  inputRow: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
+  // Card wrapper for each section
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+
+  // Headings
+  heading: {
+    fontSize: 22,
+    fontWeight: "700",
+    marginBottom: 12,
+  },
+  sectionHeading: {
+    fontSize: 20,
+    fontWeight: "600",
+    marginBottom: 12,
+  },
+
+  // Input row
+  inputRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    backgroundColor: "#fff",
+  },
   input: {
     flex: 1,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    padding: 10,
-    borderRadius: 8,
-    minHeight: 50,
-    backgroundColor: "#f9f9f9",
+    fontSize: 16,
+    paddingVertical: 8,
   },
-  iconButton: { marginLeft: 8, padding: 6 },
+  iconButton: {
+    paddingHorizontal: 6,
+    paddingVertical: 6,
+  },
 
   // History
-  history: { marginTop: 20 },
-  historyHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  entryBox: {
+    padding: 10,
+    borderRadius: 8,
     marginBottom: 10,
   },
-  group: { marginBottom: 30 },
-  dateHeading: { fontSize: 16, fontWeight: "600", marginBottom: 8 },
-  entryBox: { padding: 10, borderRadius: 6, marginBottom: 8 },
-  taskBox: { backgroundColor: "#E6F4EA" },
-  thoughtBox: { backgroundColor: "#E8F0FE" },
+  thoughtBox: {
+    backgroundColor: "#EAF4FF",
+  },
+  taskBox: {
+    backgroundColor: "#E9F9EE",
+  },
   entryHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 4,
   },
-  entryTime: { fontSize: 12, color: "#666" },
-  entryText: { fontSize: 16, color: "#333", marginTop: 4 },
+  entryTime: {
+    fontSize: 12,
+    color: "#555",
+  },
+  entryText: {
+    fontSize: 16,
+    color: "#333",
+  },
 
-  // Picker
-  pickerOverlay: { flex: 1, justifyContent: "flex-end", backgroundColor: "rgba(0,0,0,0.4)" },
-  pickerSheet: {
-    backgroundColor: "#1C1C1E",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingBottom: 30,
+  // History date heading
+  dateHeading: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginBottom: 6,
+    color: "#666",
   },
-  pickerHeader: {
+
+  // History section header row
+  historyHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 15,
-    borderBottomColor: "#333",
-    borderBottomWidth: 1,
+    alignItems: "center",
   },
-  pickerHeaderText: { color: "#0A84FF", fontSize: 16 },
-  pickerPreview: { color: "white", fontSize: 16 },
-  pickerBody: { backgroundColor: "#1C1C1E" },
+
+  // Group spacing
+  group: {
+    marginBottom: 12,
+  },
 });

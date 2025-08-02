@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Platform } from "react-native";
+import {
+  View,
+  Text,
+  Platform,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
+import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
+import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
@@ -10,7 +19,9 @@ import TaskInput from "./components/TaskInput";
 import HistoryList from "./components/HistoryList";
 import TaskPicker from "./components/TaskPicker";
 
-export default function App() {
+function MainApp() {
+  const insets = useSafeAreaInsets();
+
   const [entries, setEntries] = useState([]);
   const [taskText, setTaskText] = useState("");
   const [showTaskPicker, setShowTaskPicker] = useState(false);
@@ -20,6 +31,7 @@ export default function App() {
 
   const STORAGE_KEY = "@mind_dump_entries";
 
+  // Load saved entries
   useEffect(() => {
     const load = async () => {
       const saved = await AsyncStorage.getItem(STORAGE_KEY);
@@ -29,6 +41,7 @@ export default function App() {
     registerForPushNotificationsAsync();
   }, []);
 
+  // Save on change
   useEffect(() => {
     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
   }, [entries]);
@@ -54,7 +67,7 @@ export default function App() {
       timestamp: new Date().toISOString(),
       type: "thought",
     };
-    setEntries([newEntry, ...entries]);
+    setEntries((prev) => [newEntry, ...prev]);
   };
 
   const startAddTask = (text) => {
@@ -76,7 +89,7 @@ export default function App() {
       type: "task",
     };
 
-    setEntries([newTask, ...entries]);
+    setEntries((prev) => [newTask, ...prev]);
     setTempTaskText("");
     setShowTaskPicker(false);
 
@@ -96,14 +109,60 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>🧠 Mind Dump</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      {/* Background gradient */}
+      <LinearGradient
+        colors={["#E6F0FF", "#FFFFFF"]}
+        style={{ flex: 1, position: "absolute", width: "100%", height: "100%" }}
+      />
 
-      <ThoughtInput onAddThought={addThought} />
-      <TaskInput taskText={taskText} setTaskText={setTaskText} onStartAddTask={startAddTask} />
-      <HistoryList entries={entries} onDelete={deleteEntry} onClearAll={clearAllEntries} />
+      <View
+        style={[
+          styles.container,
+          { paddingTop: insets.top, paddingBottom: insets.bottom },
+        ]}
+      >
+        {/* Mind Dump Section */}
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <View style={styles.card}>
+            <Text style={styles.heading}>🧠 Mind Dump</Text>
+            <ThoughtInput onAddThought={addThought} />
+          </View>
+        </TouchableWithoutFeedback>
 
-      {Platform.OS === "ios" && (
+        {/* Task Planner Section */}
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <View style={styles.card}>
+            <Text style={styles.sectionHeading}>✅ Task Planner</Text>
+            <TaskInput
+              taskText={taskText}
+              setTaskText={setTaskText}
+              onStartAddTask={startAddTask}
+            />
+          </View>
+        </TouchableWithoutFeedback>
+
+        {/* History Section */}
+        <View
+          style={[
+            styles.card,
+            {
+              flex: 1, // Fill remaining space
+              overflow: "hidden",
+            },
+          ]}
+        >
+          <HistoryList
+            entries={entries}
+            onDelete={deleteEntry}
+            onClearAll={clearAllEntries}
+          />
+        </View>
+
+        {/* TaskPicker Modal */}
         <TaskPicker
           visible={showTaskPicker}
           setVisible={setShowTaskPicker}
@@ -113,7 +172,15 @@ export default function App() {
           setSelectedTime={setSelectedTime}
           onConfirm={confirmTask}
         />
-      )}
-    </View>
+      </View>
+    </KeyboardAvoidingView>
+  );
+}
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <MainApp />
+    </SafeAreaProvider>
   );
 }
