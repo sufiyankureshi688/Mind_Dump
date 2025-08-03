@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, View, Text, TouchableOpacity, Platform, StyleSheet } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import stylesGlobal from "../styles"; // ✅ Correct path to global styles
+import stylesGlobal from "../styles";
 
 export default function TaskPicker({
   visible,
@@ -18,31 +18,46 @@ export default function TaskPicker({
   const [showPicker, setShowPicker] = useState(false);
 
   useEffect(() => {
-    setTempDate(selectedDate);
-    setTempTime(selectedTime);
     if (visible) {
+      setTempDate(selectedDate);
+      setTempTime(selectedTime);
       setMode("date");
       setShowPicker(true);
     }
   }, [visible]);
 
-  const handleChange = (event, value) => {
+  const handleAndroidDateChange = (event, value) => {
     if (event.type === "dismissed") {
+      setShowPicker(false);
       setVisible(false);
       return;
     }
+    setTempDate(value || tempDate);
+    setShowPicker(false);
 
+    // Open time picker after date
+    setTimeout(() => {
+      setMode("time");
+      setShowPicker(true);
+    }, 100);
+  };
+
+  const handleAndroidTimeChange = (event, value) => {
+    if (event.type === "dismissed") {
+      setShowPicker(false);
+      setVisible(false);
+      return;
+    }
+    setTempTime(value || tempTime);
+    setShowPicker(false);
+    confirmSelection(value || tempTime);
+  };
+
+  const handleIOSChange = (event, value) => {
     if (mode === "date") {
       setTempDate(value || tempDate);
-      if (Platform.OS === "android") {
-        setMode("time");
-        setShowPicker(true);
-      }
     } else {
       setTempTime(value || tempTime);
-      if (Platform.OS === "android") {
-        confirmSelection();
-      }
     }
   };
 
@@ -58,7 +73,7 @@ export default function TaskPicker({
       <DateTimePicker
         value={mode === "date" ? tempDate : tempTime}
         mode={mode}
-        onChange={handleChange}
+        onChange={mode === "date" ? handleAndroidDateChange : handleAndroidTimeChange}
       />
     );
   }
@@ -74,8 +89,8 @@ export default function TaskPicker({
           <DateTimePicker
             value={mode === "date" ? tempDate : tempTime}
             mode={mode}
-            display={Platform.OS === "ios" ? "spinner" : "default"}
-            onChange={handleChange}
+            display="spinner"
+            onChange={handleIOSChange}
             style={{ width: "100%" }}
           />
 
