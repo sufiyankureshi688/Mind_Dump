@@ -9,20 +9,21 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/vector-icons": "^14.1.0",
+    "@react-native-async-storage/async-storage": "2.1.2",
+    "@react-native-community/datetimepicker": "8.4.1",
     "expo": "~53.0.20",
+    "expo-device": "~7.1.4",
+    "expo-linear-gradient": "~14.1.5",
+    "expo-notifications": "~0.31.4",
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
     "react-native": "0.79.5",
-    "@react-native-async-storage/async-storage": "2.1.2",
-    "@expo/vector-icons": "^14.1.0",
-    "@react-native-community/datetimepicker": "8.4.1",
-    "expo-notifications": "~0.31.4",
-    "expo-device": "~7.1.4",
-    "react-native-safe-area-context": "5.4.0",
-    "expo-linear-gradient": "~14.1.5"
+    "react-native-safe-area-context": "5.4.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "eas-cli": "^16.17.4"
   },
   "private": true
 }
